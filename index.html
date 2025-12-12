@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>肥氏企業軟體資源網</title>
+    <style>
+        /* 柔和深色模式基本樣式設定 */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            padding: 40px; 
+            background-color: #1F2937; 
+            color: #F9FAFB; 
+
+            /* ================================================= */
+            /* 💡 關鍵修改：將 img001.png 設置為整個網頁的背景 */
+            background-image: url('img001.png'); 
+            background-size: cover;          /* 確保圖片填滿整個視窗 */
+            background-position: center;     /* 圖片置中 */
+            background-attachment: fixed;    /* 讓圖片固定不動，捲動時內容移動 */
+            background-repeat: no-repeat;
+            /* ================================================= */
+        }
+        
+        /* 💡 新增：全頁遮罩 (讓文字內容在背景圖上更清晰) */
+        body::before {
+            content: "";
+            position: fixed; /* 固定在視窗上 */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6); /* 60% 透明度的黑色遮罩 */
+            z-index: -1; /* 位於所有內容下方，僅在背景圖上方 */
+        }
+        h1 { 
+            color: #81E6D9; 
+            text-align: center; 
+            margin-bottom: 5px;
+        }
+        p.description {
+            text-align: center;
+            color: #A0AEC0; 
+            margin-bottom: 30px;
+        }
+        .software-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        /* 搜尋欄位的樣式 */
+        #softwareSearch {
+            display: block;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 25px; 
+            padding: 15px 20px 15px 50px; 
+            font-size: 1.1em;
+            border: 2px solid #63B3ED;
+            border-radius: 30px;
+            background-color: #374151; 
+            color: #F9FAFB;
+            transition: border-color 0.3s;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2363B3ED' width='24px' height='24px'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 15px center;
+            box-sizing: border-box; 
+        }
+        #softwareSearch::placeholder {
+            color: #A0AEC0;
+        }
+        #softwareSearch:focus {
+            border-color: #81E6D9; 
+            outline: none;
+        }
+        
+        .software-item { 
+            background-color: #374151; 
+            padding: 25px; 
+            margin-bottom: 15px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            /* 保持左邊藍色條 */
+            border-left: 5px solid #63B3ED; 
+        }
+        .info-area {
+            flex-grow: 1; 
+        }
+        h2 { 
+            color: #FFFFFF; 
+            margin-top: 0; 
+            margin-bottom: 5px; 
+            font-size: 1.5em;
+            /* 讓 H2 內容與徽章並排 */
+            display: flex; 
+            align-items: center;
+        }
+        
+        /* *** 調整：熱門標籤改為橘黃色底 *** */
+        .hot-badge {
+            margin-left: 10px; 
+            padding: 2px 6px;
+            
+            font-size: 0.7em; 
+            font-weight: bold;
+            color: #1F2937; /* 標籤文字保持深色 */
+            background-color: #F6AD55; /* **修改：橘黃色背景** */
+            border-radius: 4px; 
+            
+            line-height: 1.2; 
+            white-space: nowrap;
+        }
+        
+        p.note { 
+            color: #CBD5E0; 
+            font-size: 0.9em; 
+            margin-bottom: 10px; 
+        }
+        
+        /* 標籤區塊與標籤項目樣式 */
+        .tags {
+            margin-top: 5px;
+            display: flex;
+            flex-wrap: wrap; 
+            gap: 8px; 
+        }
+        .tag-item {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            font-weight: bold;
+            color: #E6FFFA; 
+            background-color: rgba(79, 209, 197, 0.2); 
+            border: 1px solid #4FD1C5;
+            white-space: nowrap;
+        }
+
+        .download-button { 
+            display: inline-block; 
+            background-color: #48BB78; 
+            color: white; 
+            padding: 12px 25px; 
+            text-decoration: none; 
+            border-radius: 25px; 
+            font-size: 1.1em; 
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            white-space: nowrap; 
+        }
+        .download-button:hover {
+            background-color: #38A169;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>💻 肥氏企業軟體資源網</h1>
+    <p class="description">點擊下方的「下載連結」按鈕，即可在新分頁中查看並下載完整的軟體檔案包。</p>
+    <p class="description">⚠️軟體僅供工程開發測試使用，請於下載後3日內自行刪除，且禁止用於商業等營利行為，請尊重智慧財產權⚠️</p>
+    
+    <input type="text" id="softwareSearch" placeholder="🔍 輸入軟體名稱、功能或標籤進行快速搜尋...">
+    
+    <div class="software-list">
+    
+        <div class="software-item">
+            <div class="info-area">
+                <h2>Adobe CS6</h2>
+                <p class="note">內含多種 Adobe CS6 版本軟體檔案。</p>
+                <div class="tags">
+                    <span class="tag-item">平面設計</span>
+                    <span class="tag-item">影像處理</span>
+                    <span class="tag-item">影片剪輯</span>
+                    <span class="tag-item">舊版本</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/folders/1sN2dWkAAMJOpMU7hkKlAAQhjDB5STgDy" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+        
+        <div class="software-item">
+            <div class="info-area">
+                <h2>Adobe CC 2017</h2>
+                <p class="note">內含多種 Adobe CC 2017 版本軟體檔案。</p>
+                <div class="tags">
+                    <span class="tag-item">平面設計</span>
+                    <span class="tag-item">影像處理</span>
+                    <span class="tag-item">影片剪輯</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/u/0/folders/1N767O8wdZETPyb0BH-AUxOrct9Fh7J1J" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+        
+        <div class="software-item">
+            <div class="info-area">
+                <h2>Adobe CC 2023 <span class="hot-badge">HOT</span></h2>
+                <p class="note">內含多種 Adobe CC 2023 版本軟體檔案。</p>
+                <div class="tags">
+                    <span class="tag-item">平面設計</span>
+                    <span class="tag-item">影像處理</span>
+                    <span class="tag-item">影片剪輯</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/u/0/folders/1r_2JafeYOmIPjT6QPy_HychjKKckEtLd" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+        
+        <div class="software-item">
+            <div class="info-area">
+                <h2>Archicad 18</h2>
+                <p class="note">建築資訊模型 (BIM) 軟體。</p>
+                <div class="tags">
+                    <span class="tag-item">BIM</span>
+                    <span class="tag-item">建築設計</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/folders/12QG5VbECwRIZCB3yqMKVFK6PP6e3b8Y4" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+        
+        <div class="software-item">
+            <div class="info-area">
+                <h2>Archicad 25</h2>
+                <p class="note">建築資訊模型 (BIM) 軟體。</p>
+                <div class="tags">
+                    <span class="tag-item">BIM</span>
+                    <span class="tag-item">建築設計</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/folders/1BDEPuUIC4J9fz2aBEiT9WP7AoHwuWmqa" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+        
+        <div class="software-item">
+            <div class="info-area">
+                <h2>Autodesk AutoCAD 2023 <span class="hot-badge">HOT</span></h2>
+                <p class="note">專業電腦輔助設計 (CAD) 軟體。</p>
+                <div class="tags">
+                    <span class="tag-item">2D製圖</span>
+                    <span class="tag-item">3D製圖</span>
+                    <span class="tag-item">CAD系統</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/u/0/folders/1XPSWQVh-RvXh9fahlUR9NB70xUHo4QKI" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+        
+        <div class="software-item">
+            <div class="info-area">
+                <h2>Autodesk Revit 2024</h2>
+                <p class="note">領先的 BIM 建築資訊模型軟體，用於建築設計、結構工程及 MEP 工程的專業三維建模。</p>
+                <div class="tags">
+                    <span class="tag-item">BIM</span>
+                    <span class="tag-item">建築設計</span>
+                    <span class="tag-item">結構工程</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/folders/1UBTCjn8D-q3sa7ZDv6MhoRI9YoBJrxOU" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+
+        <div class="software-item">
+            <div class="info-area">
+                <h2>Autodesk 3ds Max 2021</h2>
+                <p class="note">專業的 3D 模型建立、動畫和渲染軟體，廣泛應用於遊戲開發、電影視覺特效與建築視覺化。</p>
+                <div class="tags">
+                    <span class="tag-item">3D建模</span>
+                    <span class="tag-item">渲染</span>
+                    <span class="tag-item">動畫</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/folders/1FmlOkULNh5zySt-2ytD1q0eNSJ5t3Isa" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+
+        <div class="software-item">
+            <div class="info-area">
+                <h2>Autodesk 3ds Max 2023</h2>
+                <p class="note">專業的 3D 模型建立、動畫和渲染軟體，廣泛應用於遊戲開發、電影視覺特效與建築視覺化。</p>
+                <div class="tags">
+                    <span class="tag-item">3D建模</span>
+                    <span class="tag-item">渲染</span>
+                    <span class="tag-item">動畫</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/folders/1mEPgq1eQEwbn0NyqlDxjOOykDjRMq_OR" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+        <div class="software-item">
+            <div class="info-area">
+                <h2>D5 Render</h2>
+                <p class="note">領先的即時光線追蹤渲染器，專為建築視覺化設計，提供高效、逼真的靜態圖與動畫輸出。</p>
+                <div class="tags">
+                    <span class="tag-item">即時渲染</span>
+                    <span class="tag-item">光追蹤</span>
+                    <span class="tag-item">建築視覺化</span>
+                </div>
+            </div>
+            <a href="https://www.d5render.com/download" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+
+        <div class="software-item">
+            <div class="info-area">
+                <h2>Enscape 3.5.6</h2>
+                <p class="note">即時渲染和虛擬實境外掛程式。</p>
+                <div class="tags">
+                    <span class="tag-item">即時渲染</span>
+                    <span class="tag-item">外掛</span>
+                    <span class="tag-item">VR</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/u/0/folders/1UK85W7HpEMxIr4Yvl82SnBzfCtZrt8t0" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+
+        <div class="software-item">
+            <div class="info-area">
+                <h2>ETABS 22</h2>
+                <p class="note">專業的建築結構分析與設計軟體，適用於高層建築的建模、分析與報告。</p>
+                <div class="tags">
+                    <span class="tag-item">結構分析</span>
+                    <span class="tag-item">高層建築</span>
+                    <span class="tag-item">土木工程</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/folders/1F4K4AV5CQMjJUW3P0_b6fMZrW_1q7qDz" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+
+        <div class="software-item">
+            <div class="info-area">
+                <h2>Lumion Pro 11 <span class="hot-badge">HOT</span></h2>
+                <p class="note">快速生成高品質影像和影片的 3D 渲染工具。</p>
+                <div class="tags">
+                    <span class="tag-item">渲染</span>
+                    <span class="tag-item">動畫</span>
+                    <span class="tag-item">建築視覺化</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/u/0/folders/1J9m7Q0wYkeEpkOybU-KdhslAUbaO0P9k" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+        
+        <div class="software-item">
+            <div class="info-area">
+                <h2>Microsoft Office 2021 <span class="hot-badge">HOT</span></h2>
+                <p class="note">Microsoft Office 文書處理軟體。</p>
+                <div class="tags">
+                    <span class="tag-item">文書處理</span>
+                    <span class="tag-item">辦公軟體</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/u/0/folders/1pcHjJB4RaIqJQnxZmZsUDqP3ELLjHp7R" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+        
+        <div class="software-item">
+            <div class="info-area">
+                <h2>Rhino 7</h2>
+                <p class="note">專業的 NURBS 3D 建模軟體，廣泛應用於工業設計與建築領域。</p>
+                <div class="tags">
+                    <span class="tag-item">NURBS</span>
+                    <span class="tag-item">3D建模</span>
+                    <span class="tag-item">工業設計</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/u/0/folders/18W96FiJ1UVf015B_GY0srMySpXCc3ScS" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+        
+        <div class="software-item">
+            <div class="info-area">
+                <h2>Sketchup 2020</h2>
+                <p class="note">易於使用的 3D 模型建立軟體 2020 版本。</p>
+                <div class="tags">
+                    <span class="tag-item">3D建模</span>
+                    <span class="tag-item">直覺操作</span>
+                    <span class="tag-item">建築設計</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/u/0/folders/10Qb6UUzVulCW9g6fesusAVdSxRSxYJy1" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+        
+        <div class="software-item">
+            <div class="info-area">
+                <h2>Sketchup 2021 <span class="hot-badge">HOT</span></h2>
+                <p class="note">易於使用的 3D 模型建立軟體 2021 版本。</p>
+                <div class="tags">
+                    <span class="tag-item">3D建模</span>
+                    <span class="tag-item">直覺操作</span>
+                    <span class="tag-item">建築設計</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/u/0/folders/1A3jMkH5nBnecyUbeW0X_ClYSzDdV687H" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+
+        <div class="software-item">
+            <div class="info-area">
+                <h2>Stable Diffusion</h2>
+                <p class="note">強大的開源 AI 圖像生成模型，可以根據文字描述（Prompt）或圖像生成細緻、多樣化的圖像。</p>
+                <div class="tags">
+                    <span class="tag-item">AI繪圖</span>
+                    <span class="tag-item">圖像生成</span>
+                    <span class="tag-item">開源</span>
+                </div>
+            </div>
+            <a href="https://drive.google.com/drive/folders/1_2jbS259OUY7jHSUs7jXpoYYgjLd46E6" target="_blank" class="download-button">
+                下載鏈結 ⬇️
+            </a>
+        </div>
+        
+    </div>
+
+    <script>
+        document.getElementById('softwareSearch').addEventListener('keyup', function() {
+            // 獲取輸入的搜尋關鍵字並轉為小寫
+            let filter = this.value.toLowerCase();
+            
+            // 獲取所有軟體項目（item）
+            let items = document.getElementsByClassName('software-item');
+
+            // 遍歷所有軟體項目
+            for (let i = 0; i < items.length; i++) {
+                // 獲取整個資訊區域的文字內容 (包含 H2, P, 和新的 Tags)
+                let infoArea = items[i].getElementsByClassName('info-area')[0];
+                let fullText = infoArea.textContent || infoArea.innerText;
+
+                // 檢查全文內容是否包含搜尋關鍵字
+                if (fullText.toLowerCase().indexOf(filter) > -1) {
+                    // 如果包含，則顯示該項目
+                    items[i].style.display = "flex";
+                } else {
+                    // 如果不包含，則隱藏該項目
+                    items[i].style.display = "none";
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
